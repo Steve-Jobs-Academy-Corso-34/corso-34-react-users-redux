@@ -1,17 +1,28 @@
-import { useState } from "react";
 import "./App.scss";
 
-import UserList from "./components/User/UserList/UserList";
-import ShowHideButton from "./components/User/ShowHideButton/ShowHideButton";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
+
+import Users from "./pages/Users";
+import useTheme from "./hooks/useTheme";
 
 const App = () => {
-    const [showUserList, setShowUserList] = useState<boolean>(false);
+    // Ottiene il tema corrente dal contesto
+    const { theme } = useTheme();
 
     return (
-        <div className="app-container">
-            <ShowHideButton show={showUserList} setShow={setShowUserList} />
+        // Contenitore principale con classe dinamica in base al tema (light-theme / dark-theme)
+        <div className={`app-container ${theme}-theme`}>
+            {/* Browser Router - Provider per gestire le rotte */}
+            <BrowserRouter>
+                <Header />
 
-            {showUserList && <UserList />}
+                {/* Routes - Definisce le rotte con i componenti Pagina */}
+                <Routes>
+                    <Route path="/" element={<h2>Home Page</h2>} />
+                    <Route path="/users" element={<Users />} />
+                </Routes>
+            </BrowserRouter>
         </div>
     );
 };

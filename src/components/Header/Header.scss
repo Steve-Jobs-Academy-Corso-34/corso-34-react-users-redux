@@ -1,0 +1,34 @@
+.header {
+    display: flex;
+    gap: 1rem;
+
+    // &- indica .header-link
+    &-link {
+        padding: 6px 12px;
+        text-decoration: none;
+
+        border-radius: 8px;
+    }
+}
+
+//Light Theme
+.light-theme {
+    .header {
+        // &- indica .header-link
+        &-link {
+            color: #ffffff;
+            background: #000000;
+        }
+    }
+}
+
+//Dark Theme
+.dark-theme {
+    .header {
+        // &- indica .header-link
+        &-link {
+            color: #000000;
+            background: #ffffff;
+        }
+    }
+}
