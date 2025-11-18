@@ -1,16 +1,27 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 
 import axios from "axios";
 
 import UserItem from "../UserItem/UserItem";
 import type { UserType } from "../../../types/users";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    selectUsers,
+    setUsersLoading,
+    setUsers,
+} from "../../../stores/slices/usersSlice";
 
 const UserList: React.FC = () => {
+    const users = useSelector(selectUsers);
+    const dispatch = useDispatch();
+
     //useState<STATE_TYPE>(INITIAL_VALUE)
     const [currentUserIndex, setCurrentUserIndex] = useState<number | undefined>();
-    const [users, setUsers] = useState<UserType[]>();
+    //const [users, setUsers] = useState<UserType[]>();
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
+        if (users.loading || users.data?.length) return;
+
         /* try {
             const response = await fetch("https://jsonplaceholder.typicode.com/users");
             const data = await response.json();
@@ -22,25 +33,27 @@ const UserList: React.FC = () => {
             console.log("fetching users completed");
         } */
 
+        dispatch(setUsersLoading(true));
+
         await axios("https://jsonplaceholder.typicode.com/users")
-            .then(({ data }) => setUsers(data))
+            .then(({ data }) => dispatch(setUsers(data)))
             .catch((error) => console.log(error))
-            .finally(() => console.log("fetching users completed"));
-    };
+            .finally(() => dispatch(setUsersLoading(false)));
+    }, [users, dispatch]);
 
     //useEffect(CALLBACK, DEPENDENCIES_ARRAY)
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [fetchUsers]);
 
     // Utente selezionato Memoized (memorizzato)
     //useMemo(CALLBACK, DEPENDENCIES_ARRAY)
     const memoizedSelectedUser = useMemo(() => {
-        if (!users?.length || currentUserIndex === undefined) return null;
+        if (!users?.data.length || currentUserIndex === undefined) return null;
 
         console.log("Calculating selected user...");
 
-        return users[currentUserIndex].name;
+        return users.data[currentUserIndex].name;
     }, [currentUserIndex, users]);
 
     // Render
@@ -54,8 +67,8 @@ const UserList: React.FC = () => {
             {/* Utilizzo del memoizedSelectedUser - Cambia solo se users o currentUserIndex cambiano */}
             <p>SELECTED USER: {memoizedSelectedUser}</p>
 
-            {users ? (
-                users.map((user: UserType, i: number) => {
+            {!users.loading ? (
+                users.data.map((user: UserType, i: number) => {
                     return (
                         <UserItem
                             user={user}

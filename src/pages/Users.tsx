@@ -1,16 +1,20 @@
-import { useState } from "react";
-
 import ShowHideButton from "../components/User/ShowHideButton/ShowHideButton";
 import UserList from "../components/User/UserList/UserList";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUsers, setUsersHidden } from "../stores/slices/usersSlice";
 
 const Users = () => {
-    const [showUserList, setShowUserList] = useState<boolean>(true);
+    const users = useSelector(selectUsers);
+    const dispatch = useDispatch();
 
     return (
         <div className="users-page">
-            <ShowHideButton show={showUserList} setShow={setShowUserList} />
+            <ShowHideButton
+                show={users.hidden}
+                setShow={(value) => dispatch(setUsersHidden(value))}
+            />
 
-            {showUserList && <UserList />}
+            {!users.hidden && <UserList />}
         </div>
     );
 };

@@ -4,11 +4,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 
 import Users from "./pages/Users";
-import useTheme from "./hooks/useTheme";
+import { useSelector } from "react-redux";
+import { selectTheme } from "./stores/slices/themeSlice";
 
 const App = () => {
-    // Ottiene il tema corrente dal contesto
-    const { theme } = useTheme();
+    const theme = useSelector(selectTheme);
 
     return (
         // Contenitore principale con classe dinamica in base al tema (light-theme / dark-theme)

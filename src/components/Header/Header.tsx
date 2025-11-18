@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 
 import "./Header.scss";
-import useTheme from "../../hooks/useTheme";
+import { useDispatch, useSelector } from "react-redux";
+import { selectTheme, toggleTheme } from "../../stores/slices/themeSlice";
 
 const Header = () => {
-    // Ottiene la funzione per cambiare il tema dal contesto
-    const { theme, toggleTheme } = useTheme();
+    const theme = useSelector(selectTheme);
+    const dispatch = useDispatch();
 
     return (
         // Barra di navigazione
@@ -21,7 +22,9 @@ const Header = () => {
             </Link>
 
             {/* Bottone per cambiare il tema */}
-            <button onClick={toggleTheme}>Switch Theme (C.T. {theme})</button>
+            <button onClick={() => dispatch(toggleTheme())}>
+                Switch Theme (C.T. {theme})
+            </button>
         </nav>
     );
 };
