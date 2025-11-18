@@ -5,7 +5,7 @@ import useTheme from "../../hooks/useTheme";
 
 const Header = () => {
     // Ottiene la funzione per cambiare il tema dal contesto
-    const { toggleTheme } = useTheme();
+    const { theme, toggleTheme } = useTheme();
 
     return (
         // Barra di navigazione
@@ -21,7 +21,7 @@ const Header = () => {
             </Link>
 
             {/* Bottone per cambiare il tema */}
-            <button onClick={toggleTheme}>Switch Theme</button>
+            <button onClick={toggleTheme}>Switch Theme (C.T. {theme})</button>
         </nav>
     );
 };

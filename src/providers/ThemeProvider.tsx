@@ -3,18 +3,18 @@ import ThemeContext, { Theme } from "../contexts/ThemeContext";
 
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     // State per gestire il tema corrente
-    const [theme, setTheme] = useState<Theme>(Theme.Light);
+    // Stato iniziale con funzione che ritorna il valore iniziale
+    const [theme, setTheme] = useState<Theme>(() => {
+        // Carica il tema dal localStorage all'inizio
+        const savedTheme = localStorage.getItem("app-theme") as Theme | null;
+        // Imposta il tema salvato o il tema di default (Light)
+        return savedTheme || Theme.Light;
+    });
 
     // Funzione per cambiare il tema
     const toggleTheme = () => {
         setTheme((prevTheme) => (prevTheme === Theme.Light ? Theme.Dark : Theme.Light));
     };
-
-    useEffect(() => {
-        // Carica il tema dal localStorage all'inizio
-        const savedTheme = localStorage.getItem("app-theme") as Theme | null;
-        setTheme(savedTheme || Theme.Light);
-    }, []);
 
     useEffect(() => {
         // Salva il tema nel localStorage quando cambia
