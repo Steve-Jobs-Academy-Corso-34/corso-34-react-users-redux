@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { Theme } from "../../enums/Theme";
+import { Theme } from "../../enums/theme";
 
 type ThemeState = {
     currentTheme: Theme;
